@@ -1,0 +1,19 @@
+# 大字体由 scripts/fetch_fonts.sh 拉取，不进仓库
+fonts/NotoSerifSC-VF.ttf
+fonts/NotoSansSC-VF.ttf
+*.part
+# 本地预览产物
+preview/screens/
+preview/video/
+qa/
+node_modules/
+__pycache__/
+package-lock.json
+
+# 本地构建环境
+.venv/
+# 预览静态回退由 build.py 生成
+preview/static/
+# 本地审查记录
+docs/browser-checks.json
+docs/review-checks.json

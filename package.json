@@ -1,0 +1,10 @@
+{
+  "name": "guanmo-profile",
+  "private": true,
+  "description": "观默 GitHub 主页与本地预览",
+  "scripts": {
+    "build": "python3 src/build.py && python3 tools/make_preview.py",
+    "preview": "python3 -m http.server 4197 --bind 127.0.0.1",
+    "check": "python3 tools/check_profile.py"
+  }
+}
