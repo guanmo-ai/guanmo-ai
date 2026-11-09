@@ -26,7 +26,7 @@
 
 <h3>03 / Three Atlas</h3>
 
-<a href="https://github.com/guanmo-ai/three-atlas"><picture><source media="(max-width: 767px)" srcset="assets/mobile/reel-03-atlas.svg?v=cfa20a3e1566"><img src="assets/reel-03-atlas.svg?v=38df640098fe" width="100%" alt="Three Atlas"></picture></a>
+<a href="https://github.com/guanmo-ai/three-atlas"><picture><source media="(max-width: 767px)" srcset="assets/mobile/reel-03-atlas.cfa20a3e1566.svg"><img src="assets/reel-03-atlas.38df640098fe.svg" width="100%" alt="Three Atlas"></picture></a>
 
 <p align="left" lang="zh-CN"><b>在浏览器中探索交互式三维世界。</b><br>从悬浮岛屿到幻想生物，汇集三维场景、模型、仿真与创意实验。旋转、靠近，在喜欢的世界停留。</p>
 
@@ -38,7 +38,7 @@
 
 <h3>04 / Awesome Agent MCP</h3>
 
-<a href="https://github.com/guanmo-ai/awesome-agent-mcp"><picture><source media="(max-width: 767px)" srcset="assets/mobile/reel-04-agent.svg?v=0f91e80c68cb"><img src="assets/reel-04-agent.svg?v=d6c74d7e1f9d" width="100%" alt="Awesome Agent MCP"></picture></a>
+<a href="https://github.com/guanmo-ai/awesome-agent-mcp"><picture><source media="(max-width: 767px)" srcset="assets/mobile/reel-04-agent.0f91e80c68cb.svg"><img src="assets/reel-04-agent.d6c74d7e1f9d.svg" width="100%" alt="Awesome Agent MCP"></picture></a>
 
 <p align="left" lang="zh-CN"><b>让 Agent 接上真实世界的服务。</b><br>整理国内厂商官方 MCP、Skill 与 CLI，按服务和用途检索，查看接入说明与官方来源；也支持 Agent 直接读取索引。</p>
 

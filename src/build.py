@@ -770,8 +770,18 @@ def responsive_image(name, alt, versioned=False):
     from html import escape
 
     def asset_url(path):
-        version = hashlib.sha256((ROOT / path).read_bytes()).hexdigest()[:12] if versioned else None
-        return path + (f"?v={version}" if version else "")
+        if not versioned:
+            return path
+        source = ROOT / path
+        content = source.read_bytes()
+        version = hashlib.sha256(content).hexdigest()[:12]
+        versioned_path = Path(path).with_name(f"{source.stem}.{version}{source.suffix}")
+        (ROOT / versioned_path).write_bytes(content)
+        # The local preview's pause button swaps assets/ for preview/static/.
+        static_source = ROOT / "preview/static" / Path(path).relative_to("assets")
+        static_target = ROOT / "preview/static" / versioned_path.relative_to("assets")
+        static_target.write_bytes(static_source.read_bytes())
+        return versioned_path.as_posix()
 
     return (f'<picture><source media="(max-width: 767px)" srcset="{asset_url(f"assets/mobile/{name}.svg")}">'
             f'<img src="{asset_url(f"assets/{name}.svg")}" width="100%" alt="{escape(alt, quote=True)}"></picture>')
