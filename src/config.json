@@ -138,6 +138,60 @@
         "cta_zh": "文库",
         "cta_en": "LIBRARY"
       }
+    },
+    "atlas": {
+      "repo": "three-atlas",
+      "site": "https://guanmo-ai.github.io/three-atlas/",
+      "kind_zh": "三维图鉴",
+      "kind_en": "3D ATLAS",
+      "title": [
+        "Three",
+        "Atlas"
+      ],
+      "lines_zh": [
+        "在浏览器里探索交互式三维世界。",
+        "旋转、靠近，在喜欢的世界停留。"
+      ],
+      "cta_zh": "探索图鉴",
+      "cta_en": "EXPLORE ATLAS",
+      "profile": {
+        "zh_lead": "在浏览器中探索交互式三维世界。",
+        "zh": "从悬浮岛屿到幻想生物，汇集三维场景、模型、仿真与创意实验。旋转、靠近，在喜欢的世界停留。",
+        "en_lead": "An atlas of interactive 3D worlds for the web.",
+        "en": "Explore scenes, models, simulations and creative experiments, from floating islands to imaginary creatures. Orbit, zoom in and stay a while.",
+        "cta_zh": "图鉴",
+        "cta_en": "ATLAS"
+      }
+    },
+    "agent": {
+      "repo": "awesome-agent-mcp",
+      "site": "https://guanmo-ai.github.io/awesome-agent-mcp/",
+      "kind_zh": "服务索引",
+      "kind_en": "SERVICE INDEX",
+      "title": [
+        "Awesome",
+        "Agent MCP"
+      ],
+      "lines_zh": [
+        "让 Agent 接上真实世界的服务。",
+        "国内厂商官方 MCP · Skill · CLI 索引。"
+      ],
+      "cta_zh": "浏览索引",
+      "cta_en": "BROWSE INDEX",
+      "profile": {
+        "zh_lead": "让 Agent 接上真实世界的服务。",
+        "zh": "整理国内厂商官方 MCP、Skill 与 CLI，按服务和用途检索，查看接入说明与官方来源；也支持 Agent 直接读取索引。",
+        "en_lead": "Connect agents to real-world services.",
+        "en": "Find official MCP servers, skills and CLIs from Chinese service providers, with searchable categories, setup guides and original sources. Built for people to browse and agents to read.",
+        "cta_zh": "索引",
+        "cta_en": "INDEX"
+      }
     }
-  }
+  },
+  "featured_reels": [
+    "motion",
+    "design",
+    "atlas",
+    "agent"
+  ]
 }

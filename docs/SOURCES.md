@@ -33,3 +33,8 @@
 - Jost、JetBrains Mono、Instrument Serif、Noto Serif SC、Noto Sans SC：SIL Open Font License，许可证保留在 `fonts/OFL-*.txt`。
 
 来源匹配依据：2026-10-21 拉取的 [Awesome AI Motion 数据](https://github.com/guanmo-ai/awesome-ai-motion/blob/main/data/cases.json)，按素材文件名内的作品 ID 核对。
+
+## 新增项目画面（2026-11-09）
+
+- `src/images/three-atlas.webp`：Three Atlas 自有作品「WHERE STARS REST / 星光的归处」真实浏览器封面，取自同一账号的 [原始文件](https://github.com/guanmo-ai/three-atlas/blob/2d173d6ac75f39da27e035f0badd5d260bd02b29/public/media/where-stars-rest-1440.webp)。仅用于该项目的主页展示，未引入第三方图库素材。
+- `assets/reel-04-agent.svg` 与手机版本：由本仓库 `src/build.py` 绘制的服务连接示意图，无厂商商标或外部图片；服务类别及介绍依据 [Awesome Agent MCP](https://github.com/guanmo-ai/awesome-agent-mcp/tree/95702f3b1cf610336ccd885090fcac251ece912a)。

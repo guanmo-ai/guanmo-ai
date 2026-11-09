@@ -24,14 +24,26 @@
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/separator-dark.svg"><img src="assets/separator-light.svg" width="100%" alt=""></picture>
 
-<h3>03 / Awesome X Growth</h3>
+<h3>03 / Three Atlas</h3>
 
-<a href="https://github.com/guanmo-ai/awesome-x-growth"><picture><source media="(max-width: 767px)" srcset="assets/mobile/reel-03-xgrowth.svg"><img src="assets/reel-03-xgrowth.svg" width="100%" alt="Awesome X Growth"></picture></a>
+<a href="https://github.com/guanmo-ai/three-atlas"><picture><source media="(max-width: 767px)" srcset="assets/mobile/reel-03-atlas.svg"><img src="assets/reel-03-atlas.svg" width="100%" alt="Three Atlas"></picture></a>
 
-<p align="left" lang="zh-CN"><b>有出处的中文 X / Twitter 运营、涨粉与变现资料库。</b><br>围绕账号定位、持续选题、互动分发、数据复盘与商业合作，整理创作者经验、原创导读与有限摘录，直达作者原文。</p>
+<p align="left" lang="zh-CN"><b>在浏览器中探索交互式三维世界。</b><br>从悬浮岛屿到幻想生物，汇集三维场景、模型、仿真与创意实验。旋转、靠近，在喜欢的世界停留。</p>
 
-<p align="left" lang="en"><b>A sourced collection of Chinese-language X / Twitter growth and monetization guides.</b> Explore creator experiences on positioning, content, distribution, analytics and partnerships, with reading guides, limited excerpts and links to the original posts.</p>
+<p align="left" lang="en"><b>An atlas of interactive 3D worlds for the web.</b> Explore scenes, models, simulations and creative experiments, from floating islands to imaginary creatures. Orbit, zoom in and stay a while.</p>
 
-<p align="left"><a href="https://guanmo-ai.github.io/awesome-x-growth/"><img src="assets/button-xgrowth.svg" height="36" alt="文库 / LIBRARY"></a> <a href="https://github.com/guanmo-ai/awesome-x-growth"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-repo-dark.svg"><img src="assets/button-repo-light.svg" height="36" alt="仓库 / Repository"></picture></a></p>
+<p align="left"><a href="https://guanmo-ai.github.io/three-atlas/"><img src="assets/button-atlas.svg" height="36" alt="图鉴 / ATLAS"></a> <a href="https://github.com/guanmo-ai/three-atlas"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-repo-dark.svg"><img src="assets/button-repo-light.svg" height="36" alt="仓库 / Repository"></picture></a></p>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/separator-dark.svg"><img src="assets/separator-light.svg" width="100%" alt=""></picture>
+
+<h3>04 / Awesome Agent MCP</h3>
+
+<a href="https://github.com/guanmo-ai/awesome-agent-mcp"><picture><source media="(max-width: 767px)" srcset="assets/mobile/reel-04-agent.svg"><img src="assets/reel-04-agent.svg" width="100%" alt="Awesome Agent MCP"></picture></a>
+
+<p align="left" lang="zh-CN"><b>让 Agent 接上真实世界的服务。</b><br>整理国内厂商官方 MCP、Skill 与 CLI，按服务和用途检索，查看接入说明与官方来源；也支持 Agent 直接读取索引。</p>
+
+<p align="left" lang="en"><b>Connect agents to real-world services.</b> Find official MCP servers, skills and CLIs from Chinese service providers, with searchable categories, setup guides and original sources. Built for people to browse and agents to read.</p>
+
+<p align="left"><a href="https://guanmo-ai.github.io/awesome-agent-mcp/"><img src="assets/button-agent.svg" height="36" alt="索引 / INDEX"></a> <a href="https://github.com/guanmo-ai/awesome-agent-mcp"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-repo-dark.svg"><img src="assets/button-repo-light.svg" height="36" alt="仓库 / Repository"></picture></a></p>
 
 <a href="https://x.com/guanmo_ai"><picture><source media="(max-width: 767px)" srcset="assets/mobile/footer.svg"><img src="assets/footer.svg" width="100%" alt="The End · X @guanmo_ai"></picture></a>

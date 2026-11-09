@@ -400,6 +400,73 @@ def build_reel_xgrowth(cfg):
 
 
 
+# ================================================================= REELS 03–04 · Three Atlas / Awesome Agent MCP
+def build_reel_atlas(cfg, mobile=False):
+    r = cfg["reels"]["atlas"]
+    width, height = (720, 660) if mobile else (W, 540)
+    d = Doc(width, height, title="Three Atlas · 三维图鉴")
+    d.defs.append(f'<clipPath id="atlas-frame"><rect width="{width}" height="{height}" rx="18"/></clipPath>')
+    d.add(f'<g clip-path="url(#atlas-frame)"><rect width="{width}" height="{height}" fill="#080B18"/>')
+    im = Image.open(IMG / "three-atlas.webp")
+    x, y, iw, ih = (48, 244, 624, 390) if mobile else (470, 10, 830, 519)
+    d.css.append('@keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}.island{animation:drift 9s ease-in-out infinite}')
+    d.add(f'<image class="island" href="{jpeg_uri(im, 90)}" x="{x}" y="{y}" width="{iw}" height="{ih}"/>')
+    if not mobile:
+        d.defs.append('<linearGradient id="atlas-shade"><stop stop-color="#080B18"/><stop offset=".34" stop-color="#080B18" stop-opacity=".97"/><stop offset=".56" stop-color="#080B18" stop-opacity="0"/></linearGradient>')
+        d.add(f'<rect width="{width}" height="{height}" fill="url(#atlas-shade)"/>')
+    x = 48 if mobile else 64
+    d.add(slate(d, x, 60 if mobile else 78, "03", r["kind_zh"], r["kind_en"]))
+    if mobile:
+        d.add(d.text("Three Atlas", S("iserif", 76, IVORY), x-2, 145))
+        d.add(d.text(r["lines_zh"][0], S("sans_med", 29, MUTE), x, 205))
+    else:
+        for i, line in enumerate(r["title"]):
+            d.add(d.text(line, S("iserif", 100, IVORY), x-3, 180+i*90))
+        for i, line in enumerate(r["lines_zh"]):
+            d.add(d.text(line, S("sans", 21, MUTE), x, 330+i*34))
+        d.add(d.text("A WORLD OF WORLDS.", S("mono", 17, "#BCACF1", .12), x, 438))
+        d.add(d.text("▶  " + r["site"].replace("https://", "").rstrip("/"), S("mono_b", 14, GOLD, .04), x, 502))
+    d.add(f'<rect x=".5" y=".5" width="{width-1}" height="{height-1}" rx="17.5" fill="none" stroke="#fff" stroke-opacity=".1"/></g>')
+    return d
+
+
+def build_reel_agent(cfg, mobile=False):
+    r = cfg["reels"]["agent"]
+    width, height = (720, 660) if mobile else (W, 540)
+    d = Doc(width, height, title="Awesome Agent MCP · 让 Agent 接上真实世界的服务")
+    d.defs.append(f'<clipPath id="agent-frame"><rect width="{width}" height="{height}" rx="18"/></clipPath>')
+    d.add(f'<g clip-path="url(#agent-frame)"><rect width="{width}" height="{height}" fill="#0C101B"/>')
+    x = 48 if mobile else 64
+    d.add(slate(d, x, 60 if mobile else 78, "04", r["kind_zh"], r["kind_en"]))
+    for i, line in enumerate(r["title"]):
+        d.add(d.text(line, S("iserif", 72 if mobile else 88, IVORY), x-3, (140 if mobile else 178)+i*(72 if mobile else 84)))
+    if mobile:
+        d.add(d.text(r["lines_zh"][0], S("sans_med", 28, MUTE), x, 276))
+    else:
+        for i, line in enumerate(r["lines_zh"]):
+            d.add(d.text(line, S("sans", 21, MUTE), x, 328+i*34))
+        d.add(d.text("MCP  /  SKILL  /  CLI", S("mono_b", 24, GOLD, .1), x, 438))
+        d.add(d.text("▶  " + r["site"].replace("https://", "").rstrip("/"), S("mono_b", 14, GOLD, .03), x, 502))
+    # An original service map; no vendor logos or external SVG dependencies.
+    d.add('<g transform="translate(0 296)" >' if mobile else '<g transform="translate(560 66)">')
+    d.add('<g transform="translate(24 0) scale(.96)">' if mobile else '<g>')
+    d.css.append('@keyframes flow{to{stroke-dashoffset:-36}}.flow{animation:flow 4s linear infinite}@keyframes pulse{0%,100%{opacity:.35}50%{opacity:.8}}.pulse{animation:pulse 5s ease-in-out infinite}')
+    cx, cy = 340, 168
+    d.add(f'<circle class="pulse" cx="{cx}" cy="{cy}" r="126" fill="none" stroke="#697BA7" stroke-opacity=".4"/>')
+    nodes = [(42, 24, "出行生活"), (42, 140, "办公协作"), (42, 256, "搜索内容"), (478, 24, "设计创作"), (478, 140, "支付金融"), (478, 256, "云与开发")]
+    for nx, ny, label in nodes:
+        edge, start = (nx+160, cx-78) if nx < cx else (nx, cx+78)
+        d.add(f'<path class="flow" d="M{start} {cy}C{(start+edge)/2} {cy} {(start+edge)/2} {ny+34} {edge} {ny+34}" fill="none" stroke="#91A6DA" stroke-opacity=".6" stroke-width="1.5" stroke-dasharray="5 7"/>')
+        d.add(f'<rect x="{nx}" y="{ny}" width="160" height="68" rx="12" fill="#151E31" stroke="#8096C4" stroke-opacity=".38"/>')
+        d.add(d.text(label, S("sans_med", 23, IVORY), nx+80, ny+42, anchor="middle"))
+    d.add(f'<rect x="{cx-78}" y="{cy-55}" width="156" height="110" rx="20" fill="#1C2332" stroke="{GOLD}" stroke-width="1.5"/>')
+    d.add(d.text("AGENT", S("mono_b", 28, IVORY, .06), cx, cy+2, anchor="middle"))
+    d.add(d.text("MCP · Skill · CLI", S("mono", 12, GOLD), cx, cy+29, anchor="middle"))
+    d.add('</g></g>')
+    d.add(f'<rect x=".5" y=".5" width="{width-1}" height="{height-1}" rx="17.5" fill="none" stroke="#fff" stroke-opacity=".1"/></g>')
+    return d
+
+
 # ================================================================= END CREDITS
 def build_footer(cfg, mobile=False):
     width, height = (720, 230) if mobile else (1280, 230)
@@ -604,7 +671,7 @@ def build_readme(cfg):
 
     u = cfg["user"]
     lines = [f"<!-- {cfg['name_zh']} {cfg['name_en']} · cinematic profile README. Generated by src/build.py — edit src/config.json, then rebuild. -->", ""]
-    for i, key in enumerate(["motion", "design", "xgrowth"], 1):
+    for i, key in enumerate(cfg["featured_reels"], 1):
         item = cfg["reels"][key]
         text = item["profile"]
         repo = f"https://github.com/{u}/{item['repo']}"
@@ -630,24 +697,27 @@ def main():
     only = set(args.assets)
     R = cfg["reels"]
     builders = {"hero": build_hero, "reel-01-motion": build_reel_motion, "reel-02-design": build_reel_design,
-                "reel-03-xgrowth": build_reel_xgrowth, "footer": build_footer}
+                "reel-03-xgrowth": build_reel_xgrowth, "footer": build_footer,
+                "reel-03-atlas": build_reel_atlas, "reel-04-agent": build_reel_agent}
     builders.update({
         "mobile/hero": build_mobile_hero,
         "mobile/reel-01-motion": lambda c: build_mobile_reel(c, "motion"),
         "mobile/reel-02-design": lambda c: build_mobile_reel(c, "design"),
         "mobile/reel-03-xgrowth": lambda c: build_mobile_reel(c, "xgrowth"),
+        "mobile/reel-03-atlas": lambda c: build_reel_atlas(c, mobile=True),
+        "mobile/reel-04-agent": lambda c: build_reel_agent(c, mobile=True),
         "mobile/footer": lambda c: build_footer(c, mobile=True),
     })
-    for i, k in enumerate(["motion", "design", "xgrowth"], 1):
+    for i, k in enumerate(cfg["featured_reels"], 1):
         for th in THEMES:
             builders[f"divider-0{i}-{th}"] = (lambda c, i=i, k=k, th=th: build_divider(f"0{i}", R[k]["kind_zh"], R[k]["kind_en"], th))
-    for k in ["motion", "design", "xgrowth"]:
+    for k in cfg["featured_reels"]:
         builders[f"btn-{k}"] = (lambda c, k=k: build_button("play", R[k]["cta_zh"], R[k]["cta_en"]))
     builders["btn-x"] = lambda c: build_button("x", "关注", "@" + c["x_handle"])
     for theme in THEMES:
         builders[f"separator-{theme}"] = lambda c, theme=theme: build_profile_separator(theme)
         builders[f"button-repo-{theme}"] = lambda c, theme=theme: build_profile_button("仓库", "REPO", theme=theme)
-    for key in ["motion", "design", "xgrowth"]:
+    for key in cfg["featured_reels"]:
         builders[f"button-{key}"] = lambda c, key=key: build_profile_button(c["reels"][key]["profile"]["cta_zh"], c["reels"][key]["profile"]["cta_en"], primary=True)
 
     unknown = only - builders.keys()

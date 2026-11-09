@@ -2,6 +2,7 @@
 """检查 GitHub 主页所需资源、SVG 安全边界与响应式回退。"""
 from pathlib import Path
 from html.parser import HTMLParser
+import json
 import re
 import xml.etree.ElementTree as ET
 
@@ -28,8 +29,9 @@ def check(root):
     errors = []
     parser = Images()
     parser.feed((root / "README.md").read_text())
-    if parser.mobile != 4:
-        errors.append("三个项目与片尾应各有手机专用图。")
+    cfg = json.loads((root / "src/config.json").read_text())
+    if parser.mobile != len(cfg["featured_reels"]) + 1:
+        errors.append("每个展示项目与片尾应各有手机专用图。")
     for ref in parser.refs:
         if not (root / ref).is_file():
             errors.append(f"本地引用不存在：{ref}")
