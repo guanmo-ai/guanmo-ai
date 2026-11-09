@@ -38,3 +38,9 @@
 
 - `src/images/three-atlas.webp`：Three Atlas 自有作品「WHERE STARS REST / 星光的归处」真实浏览器封面，取自同一账号的 [原始文件](https://github.com/guanmo-ai/three-atlas/blob/2d173d6ac75f39da27e035f0badd5d260bd02b29/public/media/where-stars-rest-1440.webp)。仅用于该项目的主页展示，未引入第三方图库素材。
 - `assets/reel-04-agent.svg` 与手机版本：由本仓库 `src/build.py` 绘制的服务连接示意图，无厂商商标或外部图片；服务类别及介绍依据 [Awesome Agent MCP](https://github.com/guanmo-ai/awesome-agent-mcp/tree/95702f3b1cf610336ccd885090fcac251ece912a)。
+
+## 电影感动效改版素材（2026-11-09）
+
+- `src/images/atlas-corallum.webp`：同一账号 Three Atlas 的真实作品封面，取自 [lumen-corallum-1440.webp](https://github.com/guanmo-ai/three-atlas/blob/2d173d6ac75f39da27e035f0badd5d260bd02b29/public/media/lumen-corallum-1440.webp)。
+- `src/images/atlas-vale.webp`：同一账号 Three Atlas 的真实作品封面，取自 [endless-vale-1440.webp](https://github.com/guanmo-ai/three-atlas/blob/2d173d6ac75f39da27e035f0badd5d260bd02b29/public/media/endless-vale-1440.webp)。
+- 镜头缩放、交叉淡入淡出、接触印相式缩略图、取景器与光线由 SVG / CSS 绘制。MCP 旋转装置、核心和连接动画为本仓库绘制，未引入第三方图像或商标。

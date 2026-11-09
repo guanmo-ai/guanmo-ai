@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from math import ceil
+from math import ceil, cos, sin, pi
 import sys
 from pathlib import Path
 
@@ -404,18 +404,53 @@ def build_reel_xgrowth(cfg):
 def build_reel_atlas(cfg, mobile=False):
     r = cfg["reels"]["atlas"]
     width, height = (720, 660) if mobile else (W, 540)
-    d = Doc(width, height, title="Three Atlas · 三维图鉴")
-    d.defs.append(f'<clipPath id="atlas-frame"><rect width="{width}" height="{height}" rx="18"/></clipPath>')
-    d.add(f'<g clip-path="url(#atlas-frame)"><rect width="{width}" height="{height}" fill="#080B18"/>')
-    im = Image.open(IMG / "three-atlas.webp")
-    x, y, iw, ih = (48, 244, 624, 390) if mobile else (470, 10, 830, 519)
-    d.css.append('@keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}.island{animation:drift 9s ease-in-out infinite}')
-    d.add(f'<image class="island" href="{jpeg_uri(im, 90)}" x="{x}" y="{y}" width="{iw}" height="{ih}"/>')
+    d = Doc(width, height, title="Three Atlas · 三维图鉴 · 三个世界的循环预告")
+    d.defs.append(
+        f'<clipPath id="atlas-frame"><rect width="{width}" height="{height}" rx="18"/></clipPath>'
+        '<linearGradient id="atlas-shade"><stop stop-color="#070912"/><stop offset=".31" stop-color="#070912" stop-opacity=".98"/>'
+        '<stop offset=".58" stop-color="#070912" stop-opacity=".22"/><stop offset="1" stop-color="#070912" stop-opacity="0"/></linearGradient>'
+        '<linearGradient id="atlas-vertical" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#070912" stop-opacity=".8"/>'
+        '<stop offset=".22" stop-color="#070912" stop-opacity="0"/><stop offset=".63" stop-color="#070912" stop-opacity="0"/>'
+        '<stop offset="1" stop-color="#070912" stop-opacity=".98"/></linearGradient>'
+        '<linearGradient id="atlas-flare"><stop stop-color="#B69BFF" stop-opacity="0"/><stop offset=".5" stop-color="#F6E4FF"/>'
+        '<stop offset="1" stop-color="#B69BFF" stop-opacity="0"/></linearGradient>'
+    )
+    d.css.append(
+        '.shot{opacity:0}.shot0{opacity:1}'
+        '@keyframes world{0%,26%{opacity:1}33%,92%{opacity:0}100%{opacity:1}}'
+        '.shot{animation:world 18s linear infinite}.shot1{animation-delay:-12s}.shot2{animation-delay:-6s}'
+        '@keyframes camera{0%{transform:translate(14px,8px) scale(.98)}100%{transform:translate(-24px,-13px) scale(1.15)}}'
+        '.camera{transform-box:fill-box;transform-origin:70% 48%;animation:camera 18s ease-in-out infinite alternate}'
+        '.camera1{animation-direction:alternate-reverse}.camera2{animation-delay:-9s}'
+        '@keyframes near{0%{transform:translate(22px,14px);opacity:0}15%,80%{opacity:.8}100%{transform:translate(-60px,-30px);opacity:0}}'
+        '.near{animation:near 9s ease-in-out infinite}'
+        '@keyframes flare{0%,35%{transform:translateX(-600px);opacity:0}43%{opacity:.8}56%{transform:translateX(1450px);opacity:0}100%{opacity:0}}'
+        '.flare{animation:flare 6s ease-in-out infinite}'
+        '@keyframes dolly{0%,100%{transform:translateX(10px)}50%{transform:translateX(-14px)}}.contact{animation:dolly 12s ease-in-out infinite}'
+        '@keyframes playhead{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}.playhead{transform-box:fill-box;transform-origin:left;animation:playhead 6s linear infinite}'
+    )
+    d.add(f'<g clip-path="url(#atlas-frame)"><rect width="{width}" height="{height}" fill="#070912"/>')
+    scenes = r["scenes"]
+    for i, scene in enumerate(scenes):
+        im = cover(Image.open(IMG / scene["image"]), 1200, 750)
+        d.defs.append(f'<image id="world{i}" href="{jpeg_uri(im, 85)}" width="1200" height="750"/>')
+        ix, iy, iw, ih = (0, 215, 744, 465) if mobile else (398, -7, 930, 581)
+        d.add(f'<g class="shot shot{i}"><g class="camera camera{i}"><svg x="{ix}" y="{iy}" width="{iw}" height="{ih}" viewBox="0 0 1200 750"><use href="#world{i}"/></svg></g></g>')
     if not mobile:
-        d.defs.append('<linearGradient id="atlas-shade"><stop stop-color="#080B18"/><stop offset=".34" stop-color="#080B18" stop-opacity=".97"/><stop offset=".56" stop-color="#080B18" stop-opacity="0"/></linearGradient>')
         d.add(f'<rect width="{width}" height="{height}" fill="url(#atlas-shade)"/>')
+    d.add(f'<rect x="0" y="{210 if mobile else 0}" width="{width}" height="{450 if mobile else height}" fill="url(#atlas-vertical)"/>')
+    # Sparse foreground points move faster than the scene to suggest depth.
+    for i in range(13):
+        sx = (i*137+561) % width
+        sy = (i*83+120) % (height-120)+60
+        if not mobile and sx < 550:
+            sx += 550
+        if mobile:
+            sy = 310+(sy % 250)
+        d.add(f'<g class="near" style="animation-delay:-{i*.61:.2f}s"><circle cx="{sx}" cy="{sy}" r="{1.2+(i%3)*.6}" fill="#E2CBFF" opacity=".6"/></g>')
+    d.add(f'<g class="flare"><rect x="-300" y="{359 if mobile else 318}" width="550" height="1.4" fill="url(#atlas-flare)"/></g>')
     x = 48 if mobile else 64
-    d.add(slate(d, x, 60 if mobile else 78, "03", r["kind_zh"], r["kind_en"]))
+    d.add(slate(d, x, 60 if mobile else 78, "03", r["kind_zh"], r["kind_en"], accent="#C1AAF4"))
     if mobile:
         d.add(d.text("Three Atlas", S("iserif", 76, IVORY), x-2, 145))
         d.add(d.text(r["lines_zh"][0], S("sans_med", 29, MUTE), x, 205))
@@ -424,8 +459,23 @@ def build_reel_atlas(cfg, mobile=False):
             d.add(d.text(line, S("iserif", 100, IVORY), x-3, 180+i*90))
         for i, line in enumerate(r["lines_zh"]):
             d.add(d.text(line, S("sans", 21, MUTE), x, 330+i*34))
-        d.add(d.text("A WORLD OF WORLDS.", S("mono", 17, "#BCACF1", .12), x, 438))
+        d.add(d.text("A WORLD OF WORLDS.", S("mono", 16, "#C1AAF4", .12), x, 438))
         d.add(d.text("▶  " + r["site"].replace("https://", "").rstrip("/"), S("mono_b", 14, GOLD, .04), x, 502))
+    # A moving contact sheet gives each world a visible place in the trailer.
+    tx, ty, tw, th, gap = (48, 539, 194, 79, 19) if mobile else (688, 401, 158, 80, 18)
+    d.add('<g class="contact">')
+    for i, scene in enumerate(scenes):
+        px = tx+i*(tw+gap)
+        d.defs.append(f'<clipPath id="thumb{i}"><rect x="{px}" y="{ty}" width="{tw}" height="{th}" rx="5"/></clipPath>')
+        d.add(f'<g clip-path="url(#thumb{i})"><svg x="{px}" y="{ty}" width="{tw}" height="{th}" viewBox="0 75 1200 600" preserveAspectRatio="xMidYMid slice"><use href="#world{i}"/></svg><rect x="{px}" y="{ty}" width="{tw}" height="{th}" fill="#070912" opacity=".23"/></g>')
+        d.add(f'<rect x="{px}" y="{ty}" width="{tw}" height="{th}" rx="5" fill="none" stroke="#DBCFFF" stroke-opacity=".26"/>')
+        d.add(f'<g class="shot shot{i}"><rect x="{px}" y="{ty}" width="{tw}" height="{th}" rx="5" fill="none" stroke="#E2CBFF" stroke-width="2"/><rect class="playhead" x="{px}" y="{ty+th+5}" width="{tw}" height="2" fill="#D7C2FF"/></g>')
+    d.add('</g>')
+    for i, scene in enumerate(scenes):
+        cx, cy = (48, 506) if mobile else (688, 372)
+        d.add(d.text(f"0{i+1} / {scene['label']}", S("mono_b", 19 if mobile else 14, IVORY, .07), cx, cy, cls=f"shot shot{i}"))
+    d.add(f'<rect width="{width}" height="18" fill="#050607"/><rect y="{height-18}" width="{width}" height="18" fill="#050607"/>')
+    d.add(corners(28, 28, width-56, height-56, arm=15, stroke="#D6C5FF", sw=1, op=.3))
     d.add(f'<rect x=".5" y=".5" width="{width-1}" height="{height-1}" rx="17.5" fill="none" stroke="#fff" stroke-opacity=".1"/></g>')
     return d
 
@@ -433,9 +483,78 @@ def build_reel_atlas(cfg, mobile=False):
 def build_reel_agent(cfg, mobile=False):
     r = cfg["reels"]["agent"]
     width, height = (720, 660) if mobile else (W, 540)
-    d = Doc(width, height, title="Awesome Agent MCP · 让 Agent 接上真实世界的服务")
-    d.defs.append(f'<clipPath id="agent-frame"><rect width="{width}" height="{height}" rx="18"/></clipPath>')
-    d.add(f'<g clip-path="url(#agent-frame)"><rect width="{width}" height="{height}" fill="#0C101B"/>')
+    d = Doc(width, height, title="Awesome Agent MCP · 连接真实世界 · 动态片头")
+    d.defs.append(
+        f'<clipPath id="agent-frame"><rect width="{width}" height="{height}" rx="18"/></clipPath>'
+        '<radialGradient id="core-glow"><stop stop-color="#E49E48" stop-opacity=".3"/><stop offset=".35" stop-color="#B47434" stop-opacity=".11"/><stop offset="1" stop-color="#07101B" stop-opacity="0"/></radialGradient>'
+        '<linearGradient id="agent-floor" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#273444" stop-opacity="0"/><stop offset="1" stop-color="#8CA8CF" stop-opacity=".45"/></linearGradient>'
+        '<linearGradient id="agent-beam"><stop stop-color="#E8B867" stop-opacity="0"/><stop offset=".5" stop-color="#FFF2CA"/><stop offset="1" stop-color="#E8B867" stop-opacity="0"/></linearGradient>'
+    )
+    d.css.append(
+        '@keyframes orbit{to{transform:rotate(360deg)}}.orbit{animation:orbit 24s linear infinite}.reverse{animation-direction:reverse;animation-duration:36s}'
+        '@keyframes tilt{0%,100%{transform:scaleX(.34) rotate(-18deg)}50%{transform:scaleX(.95) rotate(18deg)}}.tilt{animation:tilt 9s ease-in-out infinite}'
+        '@keyframes core{0%,100%{transform:rotate(-7deg) translateY(5px)}50%{transform:rotate(11deg) translateY(-9px)}}.core{animation:core 7s ease-in-out infinite}'
+        '.orbit,.tilt,.core{transform-box:fill-box;transform-origin:center}'
+        '@keyframes packet{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}.packet{animation:packet 3s linear infinite}'
+        '@keyframes beacon{0%,100%{opacity:.3}50%{opacity:1}}.beacon{animation:beacon 3s ease-in-out infinite}'
+        '@keyframes ripple{0%{transform:scale(.7);opacity:0}20%{opacity:.5}100%{transform:scale(1.45);opacity:0}}.ripple{transform-box:fill-box;transform-origin:center;animation:ripple 6s ease-out infinite}'
+        '@keyframes node{0%,100%{transform:translateY(-5px)}50%{transform:translateY(6px)}}.node{animation:node 7s ease-in-out infinite}'
+        '@keyframes floor{to{transform:translateY(52px)}}.floor{animation:floor 4s linear infinite}'
+        '@keyframes beam{0%,28%{transform:translateX(-900px);opacity:0}36%{opacity:.8}66%,100%{transform:translateX(1400px);opacity:0}}.beam{animation:beam 8s ease-in-out infinite}'
+    )
+    d.add(f'<g clip-path="url(#agent-frame)"><rect width="{width}" height="{height}" fill="#090E16"/>')
+    # The entire scene has a floor, rotating apparatus and separately moving foreground nodes.
+    ox, oy = (0, 300) if mobile else (560, 0)
+    cx, cy, radius = 360, (166 if mobile else 265), (108 if mobile else 151)
+    d.add(f'<g transform="translate({ox} {oy})">')
+    d.add(f'<ellipse cx="{cx}" cy="{cy}" rx="{radius*2.2}" ry="{radius*1.8}" fill="url(#core-glow)"/>')
+    horizon, floor_bottom = cy+40, (380 if mobile else 580)
+    for i in range(11):
+        bx = -200+i*110
+        d.add(f'<path d="M{cx+(bx-cx)*.11} {horizon}L{bx} {floor_bottom}" fill="none" stroke="url(#agent-floor)" stroke-width="1"/>')
+    d.add('<g class="floor" opacity=".16">')
+    for i in range(5):
+        fy = horizon+15+i*52
+        d.add(f'<path d="M0 {fy}H720" stroke="#7599C8" stroke-width="1"/>')
+    d.add('</g>')
+    top_node = 42 if mobile else 80
+    nodes = [(90, top_node, "出行生活", "LIFE"), (624, top_node, "设计创作", "DESIGN"),
+             (70, cy, "办公协作", "WORK"), (650, cy, "云与开发", "CLOUD"),
+             (100, cy+134 if mobile else 449, "搜索内容", "SEARCH"),
+             (620, cy+134 if mobile else 449, "支付金融", "PAYMENT")]
+    for i, (nx, ny, zh, en) in enumerate(nodes):
+        # Beams visibly travel into the core instead of just shifting a dashed line.
+        path = f'M{nx} {ny}C{(nx+cx)/2} {ny} {(nx+cx)/2} {cy} {cx} {cy}'
+        d.add(f'<path d="{path}" fill="none" stroke="#7693B5" stroke-opacity=".24" stroke-width="1"/>')
+        d.add(f'<path class="packet" style="animation-delay:-{i*.47:.2f}s" d="{path}" pathLength="100" fill="none" stroke="{GOLD}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="2 98"/>')
+        d.add(f'<g class="node" style="animation-delay:-{i*.8:.1f}s"><circle cx="{nx}" cy="{ny}" r="5" fill="#E6BB77"/>'
+              f'<circle class="beacon" style="animation-delay:-{i*.47:.2f}s" cx="{nx}" cy="{ny}" r="12" fill="none" stroke="{GOLD}" stroke-opacity=".65"/>')
+        anchor = "start" if nx < cx else "end"
+        label_x = nx-18 if nx < cx else nx+18
+        d.add(d.text(zh, S("sans_med", 22 if mobile else 20, IVORY), label_x, ny-26, anchor=anchor))
+        if not mobile:
+            d.add(d.text(en, S("mono", 10, "#8096B1", .2), label_x, ny+29, anchor=anchor))
+        d.add('</g>')
+    d.add(f'<circle class="ripple" cx="{cx}" cy="{cy}" r="{radius}" fill="none" stroke="{GOLD}" stroke-width="1"/>')
+    d.add(f'<circle cx="{cx}" cy="{cy}" r="{radius}" fill="#0C131D" fill-opacity=".75" stroke="#B68D51" stroke-opacity=".55" stroke-width="1"/>')
+    d.add('<g class="orbit">')
+    for i in range(48):
+        angle = i*pi/24
+        inside = radius-(11 if i%4==0 else 5)
+        d.add(f'<path d="M{cx+inside*cos(angle):.2f} {cy+inside*sin(angle):.2f}L{cx+(radius+2)*cos(angle):.2f} {cy+(radius+2)*sin(angle):.2f}" stroke="{GOLD}" stroke-opacity="{.75 if i%4==0 else .3}" stroke-width="1"/>')
+    d.add(f'<circle cx="{cx}" cy="{cy}" r="{radius-21}" fill="none" stroke="{GOLD}" stroke-width="2" stroke-dasharray="84 28 10 28" stroke-opacity=".75"/></g>')
+    d.add(f'<g class="orbit reverse"><circle cx="{cx}" cy="{cy}" r="{radius-34}" fill="none" stroke="#8DA9D1" stroke-width="1" stroke-dasharray="5 11" stroke-opacity=".55"/></g>')
+    d.add(f'<g class="tilt"><circle cx="{cx}" cy="{cy}" r="{radius-10}" fill="none" stroke="#AFC3DE" stroke-width="1.2" stroke-opacity=".8"/></g>')
+    # Isometric translucent core; slow roll gives the machinery an independent rhythm.
+    s = 49 if mobile else 62
+    d.add('<g class="core">')
+    d.add(f'<path d="M{cx} {cy-s}L{cx+s*.87} {cy-s*.5}L{cx} {cy}L{cx-s*.87} {cy-s*.5}Z" fill="#EDBD76" fill-opacity=".26" stroke="#E5C89A" stroke-width="1.5"/>')
+    d.add(f'<path d="M{cx-s*.87} {cy-s*.5}L{cx} {cy}V{cy+s}L{cx-s*.87} {cy+s*.5}Z" fill="#7C9CC9" fill-opacity=".12" stroke="#9BADC8" stroke-width="1.1"/>')
+    d.add(f'<path d="M{cx} {cy}L{cx+s*.87} {cy-s*.5}V{cy+s*.5}L{cx} {cy+s}Z" fill="#DCA158" fill-opacity=".15" stroke="#E5C89A" stroke-width="1.1"/>')
+    d.add(f'<circle class="beacon" cx="{cx}" cy="{cy}" r="5" fill="#FFF2D9"/></g>')
+    d.add(d.text("AGENT", S("mono_b", 13 if mobile else 17, IVORY, .2), cx, cy+radius+29, anchor="middle"))
+    d.add('</g>')
+    d.add(f'<g class="beam"><rect x="-400" y="{oy+cy}" width="600" height="1.5" fill="url(#agent-beam)"/></g>')
     x = 48 if mobile else 64
     d.add(slate(d, x, 60 if mobile else 78, "04", r["kind_zh"], r["kind_en"]))
     for i, line in enumerate(r["title"]):
@@ -447,22 +566,8 @@ def build_reel_agent(cfg, mobile=False):
             d.add(d.text(line, S("sans", 21, MUTE), x, 328+i*34))
         d.add(d.text("MCP  /  SKILL  /  CLI", S("mono_b", 24, GOLD, .1), x, 438))
         d.add(d.text("▶  " + r["site"].replace("https://", "").rstrip("/"), S("mono_b", 14, GOLD, .03), x, 502))
-    # An original service map; no vendor logos or external SVG dependencies.
-    d.add('<g transform="translate(0 296)" >' if mobile else '<g transform="translate(560 66)">')
-    d.add('<g transform="translate(24 0) scale(.96)">' if mobile else '<g>')
-    d.css.append('@keyframes flow{to{stroke-dashoffset:-36}}.flow{animation:flow 4s linear infinite}@keyframes pulse{0%,100%{opacity:.35}50%{opacity:.8}}.pulse{animation:pulse 5s ease-in-out infinite}')
-    cx, cy = 340, 168
-    d.add(f'<circle class="pulse" cx="{cx}" cy="{cy}" r="126" fill="none" stroke="#697BA7" stroke-opacity=".4"/>')
-    nodes = [(42, 24, "出行生活"), (42, 140, "办公协作"), (42, 256, "搜索内容"), (478, 24, "设计创作"), (478, 140, "支付金融"), (478, 256, "云与开发")]
-    for nx, ny, label in nodes:
-        edge, start = (nx+160, cx-78) if nx < cx else (nx, cx+78)
-        d.add(f'<path class="flow" d="M{start} {cy}C{(start+edge)/2} {cy} {(start+edge)/2} {ny+34} {edge} {ny+34}" fill="none" stroke="#91A6DA" stroke-opacity=".6" stroke-width="1.5" stroke-dasharray="5 7"/>')
-        d.add(f'<rect x="{nx}" y="{ny}" width="160" height="68" rx="12" fill="#151E31" stroke="#8096C4" stroke-opacity=".38"/>')
-        d.add(d.text(label, S("sans_med", 23, IVORY), nx+80, ny+42, anchor="middle"))
-    d.add(f'<rect x="{cx-78}" y="{cy-55}" width="156" height="110" rx="20" fill="#1C2332" stroke="{GOLD}" stroke-width="1.5"/>')
-    d.add(d.text("AGENT", S("mono_b", 28, IVORY, .06), cx, cy+2, anchor="middle"))
-    d.add(d.text("MCP · Skill · CLI", S("mono", 12, GOLD), cx, cy+29, anchor="middle"))
-    d.add('</g></g>')
+    d.add(f'<rect width="{width}" height="18" fill="#050607"/><rect y="{height-18}" width="{width}" height="18" fill="#050607"/>')
+    d.add(corners(28, 28, width-56, height-56, arm=15, stroke=GOLD, sw=1, op=.3))
     d.add(f'<rect x=".5" y=".5" width="{width-1}" height="{height-1}" rx="17.5" fill="none" stroke="#fff" stroke-opacity=".1"/></g>')
     return d
 

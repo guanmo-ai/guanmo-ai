@@ -161,7 +161,21 @@
         "en": "Explore scenes, models, simulations and creative experiments, from floating islands to imaginary creatures. Orbit, zoom in and stay a while.",
         "cta_zh": "图鉴",
         "cta_en": "ATLAS"
-      }
+      },
+      "scenes": [
+        {
+          "image": "three-atlas.webp",
+          "label": "WHERE STARS REST"
+        },
+        {
+          "image": "atlas-corallum.webp",
+          "label": "LUMEN CORALLUM"
+        },
+        {
+          "image": "atlas-vale.webp",
+          "label": "ENDLESS VALE"
+        }
+      ]
     },
     "agent": {
       "repo": "awesome-agent-mcp",

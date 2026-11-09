@@ -39,3 +39,7 @@ Python 依赖已固定版本；字体下载固定到 Google Fonts 的一个提�
 四个项目按 Awesome AI Motion、Design Style、Three Atlas、Awesome Agent MCP 排列，均使用编号标题、原有展示图、左对齐中英文介绍与 36px 高双语按钮。项目之间使用紧凑的取景器细线分隔；各项目图、手机专用构图与片尾保留。主页不显示“画面来源 / Artwork sources”入口；来源记录保留在 `docs/SOURCES.md`。个人品牌头图、顶部关注按钮、个人副标题与重复身份文字不进入正文。GitHub 自带的 README 文件标题由平台显示。
 
 2026-11-09，按用户要求将第 3 个项目改为 Three Atlas，第 4 个项目设为 Awesome Agent MCP。Awesome X Growth 的配置、构建函数与旧资源保留，当前不进入主页展示。Three Atlas 使用真实作品封面，Agent MCP 使用本仓库绘制的服务连接示意图；本次不修改账号资料或仓库置顶。
+
+## 电影感动效改版
+
+2026-11-09，用户审阅动态对照页后确认电影感动效改版，同步至主页。Three Atlas 使用配置中的 `scenes` 切换三个真实作品画面，18 秒循环，并加入推镜、前景点光与缩略图进度；Awesome Agent MCP 使用旋转轨道、摆动核心、传输光束与移动地面网格。桌面和手机版本均保留自包含 SVG 与减少动态效果支持。上一版已发布基线为 `5512004412d37d2d29c57a08477b2f7a04bc4e3f`。
