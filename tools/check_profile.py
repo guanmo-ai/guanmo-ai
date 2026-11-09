@@ -33,7 +33,7 @@ def check(root):
     if parser.mobile != len(cfg["featured_reels"]) + 1:
         errors.append("每个展示项目与片尾应各有手机专用图。")
     for ref in parser.refs:
-        if not (root / ref).is_file():
+        if not (root / ref.split("?", 1)[0]).is_file():
             errors.append(f"本地引用不存在：{ref}")
     svgs = list((root / "assets").rglob("*.svg"))
     for path in svgs:

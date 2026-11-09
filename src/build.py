@@ -8,6 +8,7 @@ All copy / numbers / links live in src/config.json.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from math import ceil, cos, sin, pi
 import sys
@@ -765,10 +766,15 @@ def build_profile_button(zh, en, primary=False, theme="light"):
 
 
 # ================================================================= README
-def responsive_image(name, alt):
+def responsive_image(name, alt, versioned=False):
     from html import escape
-    return (f'<picture><source media="(max-width: 767px)" srcset="assets/mobile/{name}.svg">'
-            f'<img src="assets/{name}.svg" width="100%" alt="{escape(alt, quote=True)}"></picture>')
+
+    def asset_url(path):
+        version = hashlib.sha256((ROOT / path).read_bytes()).hexdigest()[:12] if versioned else None
+        return path + (f"?v={version}" if version else "")
+
+    return (f'<picture><source media="(max-width: 767px)" srcset="{asset_url(f"assets/mobile/{name}.svg")}">'
+            f'<img src="{asset_url(f"assets/{name}.svg")}" width="100%" alt="{escape(alt, quote=True)}"></picture>')
 
 
 def build_readme(cfg):
@@ -783,7 +789,7 @@ def build_readme(cfg):
         if i > 1:
             lines.extend(['<picture><source media="(prefers-color-scheme: dark)" srcset="assets/separator-dark.svg"><img src="assets/separator-light.svg" width="100%" alt=""></picture>', ""])
         lines.extend([f'<h3>0{i} / {escape(" ".join(item["title"]))}</h3>', ""])
-        lines.extend([f'<a href="{repo}">' + responsive_image(f"reel-0{i}-{key}", " ".join(item["title"])) + "</a>", ""])
+        lines.extend([f'<a href="{repo}">' + responsive_image(f"reel-0{i}-{key}", " ".join(item["title"]), versioned=key in ("atlas", "agent")) + "</a>", ""])
         zh = f'<b>{escape(text["zh_lead"])}</b><br>{escape(text["zh"])}'
         en = f'<b>{escape(text["en_lead"])}</b> {escape(text["en"])}'
         lines.extend([f'<p align="left" lang="zh-CN">{zh}</p>', "", f'<p align="left" lang="en">{en}</p>', ""])
